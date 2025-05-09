@@ -66,6 +66,12 @@ class RCTShopifyCheckoutSheetKit: RCTEventEmitter, CheckoutDelegate {
 		}
 	}
 
+	func checkoutDidClickLink(url: URL) {
+		if hasListeners {
+			self.sendEvent(withName: "linkClicked", body: ["url": url.absoluteString])
+		}
+	}
+
 	func shouldRecoverFromError(error: CheckoutError) -> Bool {
 		return error.isRecoverable
 	}
