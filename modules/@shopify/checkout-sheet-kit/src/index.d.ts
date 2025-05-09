@@ -144,10 +144,15 @@ export type CheckoutEvent =
   | 'completed'
   | 'error'
   | 'geolocationRequest'
-  | 'pixel';
+  | 'pixel'
+  | 'linkClicked';
 
 export interface GeolocationRequestEvent {
   origin: string;
+}
+
+export interface LinkClickedEvent {
+  url: string;
 }
 
 export type CloseEventCallback = () => void;
@@ -156,6 +161,7 @@ export type GeolocationRequestEventCallback = (
 ) => void;
 export type PixelEventCallback = (event: PixelEvent) => void;
 export type CheckoutExceptionCallback = (error: CheckoutException) => void;
+export type LinkClickedEventCallback = (event: LinkClickedEvent) => void;
 export type CheckoutCompletedEventCallback = (
   event: CheckoutCompletedEvent,
 ) => void;
@@ -165,7 +171,8 @@ export type CheckoutEventCallback =
   | CheckoutExceptionCallback
   | CheckoutCompletedEventCallback
   | GeolocationRequestEventCallback
-  | PixelEventCallback;
+  | PixelEventCallback
+  | LinkClickedEventCallback;
 
 function addEventListener(
   event: 'close',
@@ -190,6 +197,11 @@ function addEventListener(
 function addEventListener(
   event: 'geolocationRequest',
   callback: GeolocationRequestEventCallback,
+): Maybe<EmitterSubscription>;
+
+function addEventListener(
+  event: 'linkClicked',
+  callback: LinkClickedEventCallback,
 ): Maybe<EmitterSubscription>;
 
 function removeEventListeners(event: CheckoutEvent): void;

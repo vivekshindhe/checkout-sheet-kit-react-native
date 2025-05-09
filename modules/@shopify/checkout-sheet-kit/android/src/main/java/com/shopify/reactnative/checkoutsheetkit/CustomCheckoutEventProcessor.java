@@ -24,12 +24,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package com.shopify.reactnative.checkoutsheetkit;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.webkit.GeolocationPermissions;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shopify.checkoutsheetkit.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -37,6 +40,9 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.shopify.checkoutsheetkit.pixelevents.PixelEvent;
 import com.shopify.checkoutsheetkit.lifecycleevents.CheckoutCompletedEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +101,17 @@ public class CustomCheckoutEventProcessor extends DefaultCheckoutEventProcessor 
       sendEventWithStringData("geolocationRequest", mapper.writeValueAsString(event));
     } catch (IOException e) {
       Log.e("ShopifyCheckoutSheetKit", "Error emitting \"geolocationRequest\" event", e);
+    }
+  }
+
+  @Override
+  public void onCheckoutLinkClicked(@NotNull Uri uri) {
+    Map<String, String> data = new HashMap<>();
+    data.put("url", uri.toString());
+    try {
+      sendEventWithStringData("linkClicked", mapper.writeValueAsString(data));
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
   }
 

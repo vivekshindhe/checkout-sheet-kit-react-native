@@ -40,6 +40,7 @@ import type {
   Configuration,
   Features,
   GeolocationRequestEvent,
+  LinkClickedEvent,
   Maybe,
   ShopifyCheckoutSheetKit,
 } from './index.d';
@@ -179,6 +180,13 @@ class ShopifyCheckoutSheet implements ShopifyCheckoutSheetKit {
           this.parseCheckoutError,
         );
         break;
+      case 'linkClicked':
+        eventCallback = this.interceptEventEmission(
+          'linkClicked',
+          callback,
+          this.parseLinkClickedEvent,
+        );
+        break;
       case 'geolocationRequest':
         eventCallback = this.interceptEventEmission(
           'geolocationRequest',
@@ -191,6 +199,11 @@ class ShopifyCheckoutSheet implements ShopifyCheckoutSheetKit {
 
     // Default handler for all non-pixel events
     return ShopifyCheckoutSheet.eventEmitter.addListener(event, eventCallback);
+  }
+
+  private parseLinkClickedEvent(eventData: LinkClickedEvent) {
+    console.log('parseLinkClickedEvent', eventData);
+    return eventData;
   }
 
   /**
@@ -405,4 +418,5 @@ export type {
   Features,
   PixelEvent,
   StandardEvent,
+  LinkClickedEvent,
 };

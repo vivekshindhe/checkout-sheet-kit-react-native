@@ -579,6 +579,12 @@ methods - available on both the context provider as well as the class instance.
 | `completed` | `(event: CheckoutCompletedEvent) => void` | Fired when the checkout has been successfully completed.     |
 | `error`     | `(error: {message: string}) => void`      | Fired when a checkout exception has been raised.             |
 | `pixel`     | `(event: PixelEvent) => void`             | Fired when a Web Pixel event has been relayed from checkout. |
+| `linkClicked` | `(event: LinkClickedEvent) => void`     | Fired when the buyer clicks a link within the checkout experience:
+         - email address (`mailto:`)
+         - telephone number (`tel:`)
+         - web (http:)
+         - deep link (e.g. myapp://checkout)
+and is being directed outside the application. | 
 
 ### `addEventListener(eventName, callback)`
 
@@ -621,12 +627,21 @@ useEffect(() => {
     },
   );
 
+  const linkClicked = shopifyCheckout.addEventListener(
+    'linkClicked',
+    (event: LinkClickedEvent) => {
+      //use the URL to trigger the intended application
+      //console.log(event.url);
+    },
+  );
+
   return () => {
     // It is important to clear the subscription on unmount to prevent memory leaks
     close?.remove();
     completed?.remove();
     error?.remove();
     pixel?.remove();
+    linkClicked?.remove();
   };
 }, [shopifyCheckout]);
 ```
