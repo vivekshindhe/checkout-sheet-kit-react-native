@@ -49,7 +49,7 @@ class RCTShopifyCheckoutSheetKit: RCTEventEmitter, CheckoutDelegate {
 	}
 
 	override func supportedEvents() -> [String]! {
-		return ["close", "completed", "error", "pixel"]
+		return ["close", "completed", "error", "pixel", "linkClicked"]
 	}
 
 	override func startObserving() {
